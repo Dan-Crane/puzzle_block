@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:puzzle_block/game/cell.dart';
-import 'package:puzzle_block/game/grid/cell_generator.dart';
+import 'package:puzzle_block/game/grid/grid_generator.dart';
 
 typedef Cells = List<List<BaseCell>>;
 
