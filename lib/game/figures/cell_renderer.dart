@@ -2,16 +2,17 @@ import 'package:flame/components.dart';
 import 'package:puzzle_block/game/cell.dart';
 import 'package:puzzle_block/game/grid/grid_controller.dart';
 
-class CellRenderer extends Component {
-  late final Cells cells;
+class CellRenderer extends PositionComponent {
+  late final Cells _cells;
   late final Vector2 sizeBounding;
   late final Vector2 cellSize;
 
   CellRenderer({
-    required this.cells,
+    required Cells cells,
     required this.sizeBounding,
     Vector2? cellSize,
   }) {
+    _cells = cells;
     this.cellSize = cellSize ?? Vector2.all(20);
   }
 
@@ -23,15 +24,16 @@ class CellRenderer extends Component {
 
   void init() {
     final figureSize = Vector2(
-      cells[0].length * cellSize.y,
-      cells.length * cellSize.x,
+      _cells[0].length * cellSize.y,
+      _cells.length * cellSize.x,
     );
-    Vector2 initPosition = (sizeBounding - figureSize) / 2;
-    var positionOffset = initPosition;
+    size = figureSize;
+    position = (sizeBounding - figureSize) / 2;
+    var positionOffset = Vector2.zero();
 
-    for (var x = 0; x < cells.length; x++) {
-      for (var y = 0; y < cells[0].length; y++) {
-        final cell = cells[x][y]
+    for (var x = 0; x < _cells.length; x++) {
+      for (var y = 0; y < _cells[0].length; y++) {
+        final cell = _cells[x][y]
           ..size = cellSize
           ..position = positionOffset;
 
@@ -42,7 +44,7 @@ class CellRenderer extends Component {
           positionOffset.y,
         );
       }
-      positionOffset = Vector2(initPosition.x, positionOffset.y + cellSize.y);
+      positionOffset = Vector2(0, positionOffset.y + cellSize.y);
     }
   }
 }
