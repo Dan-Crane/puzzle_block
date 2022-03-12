@@ -1,9 +1,16 @@
+import 'dart:ui';
+
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:puzzle_block/game/cell.dart';
 import 'package:puzzle_block/game/grid/grid_controller.dart';
 
 class Grid extends PositionComponent {
   late final GridConroller gridConroller;
+
+  @override
+  bool get debugMode => true;
+  @override
+  Color get debugColor => Color.fromARGB(255, 26, 237, 7);
 
   Grid({
     int? row,
@@ -15,27 +22,14 @@ class Grid extends PositionComponent {
       row: row,
       column: column,
       gridSize: size,
-    );
+    )..addListener(_updateCells);
   }
 
   @override
   Future<void>? onLoad() async {
     await super.onLoad();
-    gridConroller.addListener(_updateCells);
-    // TODO! after first insert gridConroller.cellsToAdd is not empty
-    _updateCells();
-  }
-
-  bool canInsert(Vector2 position, List<List<BaseCell>> figure) {
-    return gridConroller.canInsert(position, figure);
-  }
-
-  void insert(Vector2 position, List<List<BaseCell>> figure) {
-    gridConroller.insert(position, figure);
-  }
-
-  void check() {
-    gridConroller.check();
+    gridConroller.init();
+    add(RectangleHitbox());
   }
 
   void _updateCells() {
@@ -43,7 +37,11 @@ class Grid extends PositionComponent {
       cell.removeFromParent();
     }
     for (final cell in gridConroller.cellsToAdd) {
-      add(cell);
+      cell.changeParent(this);
+      if (cell.parent != null) {
+      } else {
+        add(cell);
+      }
     }
   }
 

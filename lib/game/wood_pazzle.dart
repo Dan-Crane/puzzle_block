@@ -1,75 +1,40 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:puzzle_block/game/cell.dart';
+import 'package:puzzle_block/game/figures/figures.dart';
+import 'package:puzzle_block/game/figures/figure_component.dart';
 import 'package:puzzle_block/game/grid/grid.dart';
 
-class WoodPazzle extends FlameGame {
-  @override
-  bool get debugMode => true;
-
+class WoodPazzle extends FlameGame with HasDraggables, HasCollisionDetection {
   @override
   Future<void>? onLoad() async {
     final grid = Grid(
-      position: Vector2(100, 100),
+      position: Vector2(0, 200),
       row: 4,
       column: 4,
-      size: Vector2(500, 500),
+      size: Vector2(400, 400),
     );
 
+    final a = FigureComponent(
+      cells: figure1,
+      position: Vector2(50, 100),
+    );
+    final a2 = FigureComponent(
+      cells: figure2,
+      position: Vector2(150, 100),
+    );
+    final a3 = FigureComponent(
+      cells: figure5,
+      position: Vector2(250, 100),
+    );
+    final a4 = FigureComponent(
+      cells: figure4,
+      position: Vector2(350, 100),
+    );
     add(grid);
-
-    final cells = [
-      [
-        CellMarble(
-          position: Vector2(0, 0),
-        ),
-        CellMarble(
-          position: Vector2(50, 0),
-        )
-      ],
-      [
-        CellEmpty(
-          position: Vector2(0, 50),
-        ),
-        CellMarble(
-          position: Vector2(50, 50),
-        ),
-      ],
-    ];
-    // final cells = [for (var list in generatedCells) list.toList()];
-
-    Future.delayed(Duration(milliseconds: 500), () {
-      // print(grid.children.length);
-    });
-    final pos = Vector2(0, 0);
-    final a = grid.canInsert(pos, cells);
-    if (a) {
-      // print('==== can insert $a');
-      Future.delayed(Duration(milliseconds: 1000), () {
-        grid.insert(pos, cells);
-        // print('==== insert');
-      });
-      Future.delayed(Duration(milliseconds: 2000), () {
-        grid.check();
-        // print('==== check');
-      });
-    }
-    Future<bool>.delayed(Duration(milliseconds: 3000), () {
-      final res = grid.canInsert(pos, cells);
-      // print('==== can insert $res');
-      return res;
-    }).then((value) {
-      // return;
-      if (value) {
-        Future.delayed(Duration(milliseconds: 4000), () {
-          grid.insert(pos, cells);
-          // print('==== insert');
-        });
-        Future.delayed(Duration(milliseconds: 5000), () {
-          grid.check();
-          // print('==== check');
-        });
-      }
-    });
+    add(a);
+    add(a2);
+    add(a3);
+    add(a4);
 
     return super.onLoad();
   }

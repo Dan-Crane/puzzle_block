@@ -16,6 +16,8 @@ class GridConroller extends ChangeNotifier {
   late final Vector2 _cellCize;
   late final CellBuilder _cellBuilder;
 
+  Vector2 get cellSize => _cellCize;
+
   GridConroller({
     int? column,
     int? row,
@@ -28,8 +30,6 @@ class GridConroller extends ChangeNotifier {
         ? Vector2(gridSize.x / _column, gridSize.y / _row)
         : Vector2.zero();
     _cellBuilder = cellBuilder;
-
-    _initGrid();
   }
 
   /// [position] must fall within size of the matrix.
@@ -37,7 +37,10 @@ class GridConroller extends ChangeNotifier {
     var result = false;
 
     // Position is out of bounds
-    if (position.y > _row || position.x > _column) return result;
+    if (position.y > _row ||
+        position.x > _column ||
+        position.y < 0 ||
+        position.x < 0) return result;
     // The figure is out of bounds of the matrix
     if ((position.y + figure.length) > _row ||
         (position.x + figure[0].length) > _column) return result;
@@ -160,7 +163,7 @@ class GridConroller extends ChangeNotifier {
     cellsToAdd.clear();
   }
 
-  void _initGrid() {
+  void init() {
     final generatedGrid = GridGenerator.generateCells(
       row: _row,
       column: _column,
@@ -170,5 +173,9 @@ class GridConroller extends ChangeNotifier {
 
     grid = [for (final row in generatedGrid) row.toList()];
     cellsToAdd.addAll([for (final row in grid) ...row]);
+
+    notifyListeners();
+    cellsToRemove.clear();
+    cellsToAdd.clear();
   }
 }
