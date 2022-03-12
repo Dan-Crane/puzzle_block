@@ -8,7 +8,7 @@ class FigureScale extends Component {
   late final FigureDraggable figureDraggable;
 
   final _controller = EffectController(
-    duration: 0.2,
+    duration: 0.3,
     curve: Curves.easeOut,
   );
 
@@ -16,7 +16,7 @@ class FigureScale extends Component {
     figureDraggable.dragStart.add(zoom);
   }
 
-  void zoom(DragStartInfo dragStartInfo) => parent?.add(_createEffect(2.0));
+  void zoom(DragStartInfo dragStartInfo) => parent?.add(_createEffect(5.0));
 
   void reset() => parent?.add(_createEffect(1.0));
 

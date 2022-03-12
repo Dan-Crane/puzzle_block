@@ -8,7 +8,9 @@ import 'package:puzzle_block/game/grid/grid.dart';
 
 class FigureCollision extends PositionComponent with CollisionCallbacks {
   Grid? _grid;
+
   bool get inBoard => _grid != null;
+  Grid? get grid => _grid;
 
   @override
   bool get debugMode => true;
