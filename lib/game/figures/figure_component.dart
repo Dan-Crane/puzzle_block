@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:puzzle_block/game/figure_board/figure_board.dart';
 import 'package:puzzle_block/game/figures/cell_renderer.dart';
 import 'package:puzzle_block/game/figures/figure_collision.dart';
 import 'package:puzzle_block/game/figures/figure_draggable.dart';
@@ -11,6 +12,7 @@ import 'package:puzzle_block/game/wood_pazzle.dart';
 
 class FigureComponent extends PositionComponent with HasGameRef<WoodPazzle> {
   late final Cells cells;
+  late final RemoveFigureDelegate removeDelegate;
 
   @override
   bool get debugMode => true;
@@ -18,6 +20,7 @@ class FigureComponent extends PositionComponent with HasGameRef<WoodPazzle> {
   FigureComponent({
     Vector2? position,
     required this.cells,
+    required this.removeDelegate,
   }) : super(position: position, size: Vector2.all(100), anchor: Anchor.center);
 
   @override
@@ -50,8 +53,15 @@ class FigureComponent extends PositionComponent with HasGameRef<WoodPazzle> {
       figureCollision: figureCollision,
       figureScale: figureScale,
       figureComponent: this,
+      removeDelegate: removeDelegate,
     ).addToParent(this);
 
     return super.onLoad();
+  }
+
+  @override
+  void onRemove() {
+    removeDelegate.onRemoveFigure(this);
+    super.onRemove();
   }
 }

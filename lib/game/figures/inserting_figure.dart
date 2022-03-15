@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
+import 'package:puzzle_block/game/figure_board/figure_board.dart';
 import 'package:puzzle_block/game/figures/figure_collision.dart';
 import 'package:puzzle_block/game/figures/figure_component.dart';
 import 'package:puzzle_block/game/figures/figure_draggable.dart';
@@ -12,6 +13,7 @@ class InsertingFigure extends Component {
   late final FigureCollision figureCollision;
   late final FigureScale figureScale;
   late final FigureComponent figureComponent;
+  late final RemoveFigureDelegate removeDelegate;
 
   InsertingFigure({
     required this.figureMovement,
@@ -19,6 +21,7 @@ class InsertingFigure extends Component {
     required this.figureCollision,
     required this.figureScale,
     required this.figureComponent,
+    required this.removeDelegate,
   }) {
     figureDraggable.dragEnd.add(_dragEnd);
   }
@@ -43,15 +46,18 @@ class InsertingFigure extends Component {
         final gridController = grid.gridConroller;
 
         gridController.insert(insertPoint, figureComponent.cells);
-        parent?.removeFromParent();
-        // DOTO! move check method
-        Future.delayed(Duration(milliseconds: 300), gridController.check);
+        removeDelegate.onRemoveFigure(figureComponent);
 
-        return;
+        // TODO! edit check method
+        Future.delayed(const Duration(milliseconds: 300), () {
+          gridController.check();
+        });
+      } else {
+        _reset();
       }
+    } else {
+      _reset();
     }
-
-    _reset();
   }
 
   void _reset() {
