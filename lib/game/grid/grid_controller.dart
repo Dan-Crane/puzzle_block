@@ -6,9 +6,13 @@ import 'package:puzzle_block/game/grid/grid_generator.dart';
 typedef Cells = List<List<BaseCell>>;
 
 class GridConroller extends ChangeNotifier {
+  /// Cell matrix
   late final Cells grid;
 
+  /// Reference to the cell that is stored in the [grid]
   final List<BaseCell> cellsToAdd = [];
+
+  /// Reference to the cell that is stored in the [grid]
   final List<BaseCell> cellsToRemove = [];
 
   late final int _column;
@@ -32,7 +36,7 @@ class GridConroller extends ChangeNotifier {
     _cellBuilder = cellBuilder;
   }
 
-  /// [position] must fall within size of the matrix.
+  /// [position] must fall within size of the [grid].
   bool canInsert(Vector2 position, List<List<BaseCell>> figure) {
     var result = false;
 
@@ -80,7 +84,8 @@ class GridConroller extends ChangeNotifier {
 
     for (var y = 0; y < figure.length; y++) {
       for (var k = 0; k < figure[0].length; k++) {
-        final cellInFigure = figure[y][k];
+        // dont work with link
+        final cellInFigure = figure[y][k].copyWith();
         final cellInGrid = grid[rootCurrentRow][rootCurrentColumn];
 
         if (cellInFigure is! CellEmpty && cellInGrid is CellEmpty) {
@@ -144,10 +149,14 @@ class GridConroller extends ChangeNotifier {
         cellsToAdd.add(newCell);
       }
     }
+
     for (var i = 0; i < rowsToRemove.length; i++) {
       var y = rowsToRemove[i];
       for (var x = 0; x < _row; x++) {
         final oldCell = grid[y][x];
+        if (cellsToRemove.contains(oldCell) || cellsToAdd.contains(oldCell)) {
+          continue;
+        }
         final newCell = CellEmpty(
           position: oldCell.position,
           size: oldCell.size,

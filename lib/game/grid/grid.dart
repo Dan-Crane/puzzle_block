@@ -10,7 +10,7 @@ class Grid extends PositionComponent {
   @override
   bool get debugMode => true;
   @override
-  Color get debugColor => Color.fromARGB(255, 26, 237, 7);
+  Color get debugColor => const Color.fromARGB(255, 26, 237, 7);
 
   Grid({
     int? row,
@@ -33,16 +33,8 @@ class Grid extends PositionComponent {
   }
 
   void _updateCells() {
-    for (final cell in gridConroller.cellsToRemove) {
-      cell.removeFromParent();
-    }
-    for (final cell in gridConroller.cellsToAdd) {
-      cell.changeParent(this);
-      if (cell.parent != null) {
-      } else {
-        add(cell);
-      }
-    }
+    gridConroller.cellsToRemove.forEach(remove);
+    gridConroller.cellsToAdd.forEach(add);
   }
 
   @override
