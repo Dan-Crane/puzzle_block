@@ -1,41 +1,32 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:puzzle_block/game/figures/figures.dart';
-import 'package:puzzle_block/game/figures/figure_component.dart';
+import 'package:flutter/material.dart';
+import 'package:puzzle_block/game/figure_board/figure_board.dart';
 import 'package:puzzle_block/game/grid/grid.dart';
 
-class WoodPazzle extends FlameGame with HasDraggables, HasCollisionDetection {
+class WoodPazzle extends FlameGame
+    with HasDraggables, HasCollisionDetection, FPSCounter {
+  @override
+  bool get debugMode => true;
+
   @override
   Future<void>? onLoad() async {
-    final grid = Grid(
+    Grid(
       position: Vector2(0, 200),
       row: 4,
       column: 4,
       size: Vector2(400, 400),
-    );
-
-    final a = FigureComponent(
-      cells: figure1,
-      position: Vector2(50, 100),
-    );
-    final a2 = FigureComponent(
-      cells: figure2,
-      position: Vector2(150, 100),
-    );
-    final a3 = FigureComponent(
-      cells: figure5,
-      position: Vector2(250, 100),
-    );
-    final a4 = FigureComponent(
-      cells: figure4,
-      position: Vector2(350, 100),
-    );
-    add(grid);
-    add(a);
-    add(a2);
-    add(a3);
-    add(a4);
+    ).addToParent(this);
+    FigureBoard().addToParent(this);
 
     return super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    final fpsCount = fps(120);
+
+    debugTextPaint.render(canvas, fpsCount.toString(), Vector2(0, 50));
+    super.render(canvas);
   }
 }
