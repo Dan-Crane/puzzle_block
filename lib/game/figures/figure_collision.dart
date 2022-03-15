@@ -24,7 +24,7 @@ class FigureCollision extends PositionComponent with CollisionCallbacks {
 
   @override
   Future<void>? onLoad() {
-    add(RectangleHitbox());
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
 
     return super.onLoad();
   }

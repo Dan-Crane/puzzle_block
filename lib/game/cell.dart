@@ -8,6 +8,14 @@ class CellEmpty extends BaseCell {
 
   @override
   String get asset => 'cell_empty';
+
+  @override
+  CellEmpty copyWith({Vector2? position, Vector2? size}) {
+    return CellEmpty(
+      position: position ?? this.position,
+      size: size ?? this.size,
+    );
+  }
 }
 
 class CellMarble extends BaseCell {
@@ -18,6 +26,14 @@ class CellMarble extends BaseCell {
 
   @override
   String get asset => 'cell_marble';
+
+  @override
+  CellMarble copyWith({Vector2? position, Vector2? size}) {
+    return CellMarble(
+      position: position ?? this.position,
+      size: size ?? this.size,
+    );
+  }
 }
 
 abstract class BaseCell extends SpriteComponent {
@@ -34,4 +50,6 @@ abstract class BaseCell extends SpriteComponent {
 
     sprite = await Sprite.load('$asset.png');
   }
+
+  BaseCell copyWith({Vector2? position, Vector2? size});
 }
